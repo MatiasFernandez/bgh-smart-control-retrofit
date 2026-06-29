@@ -1,5 +1,6 @@
 esphome:
-  name: proto-smart-hvac
+  name: comedor-control-aire
+  friendly_name: "Comedor Control Aire"
 
 esp32:
   board: esp32-c3-devkitm-1
@@ -7,10 +8,9 @@ esp32:
   framework:
     type: arduino
 
-# Enable logging
+# Activar logging
 logger:
 
-# Enable Home Assistant API
 api:
   encryption:
     key: !secret api_encryption_key
@@ -25,13 +25,8 @@ wifi:
 
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
-    ssid: "Proto Smart Hvac"
+    ssid: "Control Aire Comedor"
     password: !secret ap_password
-
-output:
-  - platform: gpio
-    pin: GPIO08
-    id: led_gpio
 
 remote_receiver:
   id: ir_receiver
@@ -46,15 +41,33 @@ remote_transmitter:
   carrier_duty_percent: 50%
   non_blocking: true
 
+# Esta configuracion de timings es para el protocolo LG2
 climate:
   - platform: climate_ir_lg
-    name: "AC"
+    name: "Aire comedor"
     header_high: 3200us
     header_low: 9900us
     bit_high: 480us # bit mark
     bit_one_low: 1600us
     bit_zero_low: 550us
     receiver_id: ir_receiver
+
+# Sensores con informacion general
+sensor:
+  # Sensor de Uptime
+  - platform: uptime
+    name: "Uptime"
+
+  # Sensor señal WiFi
+  - platform: wifi_signal
+    name: "WiFi Signal"
+    update_interval: 60s
+
+button:
+  - platform: safe_mode
+    name: "Restart device (Safe Mode)"
+  - platform: restart
+    name: "Restart device"
 
 # Blink para verificar que el firmware esta cargado correctamente
 # interval:
@@ -63,6 +76,11 @@ climate:
 #      - output.turn_on: led_gpio
 #      - delay: 1s
 #      - output.turn_off: led_gpio
+#
+# output:
+#  - platform: gpio
+#    pin: GPIO08
+#    id: led_gpio
 
 captive_portal:
     
