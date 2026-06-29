@@ -56,13 +56,13 @@ climate:
     bit_zero_low: 550us
     receiver_id: ir_receiver
 
-# Test blink
-interval:
-  - interval: 2s
-    then:
-      - output.turn_on: led_gpio
-      - delay: 1s
-      - output.turn_off: led_gpio
+# Blink para verificar que el firmware esta cargado correctamente
+# interval:
+#  - interval: 2s
+#    then:
+#      - output.turn_on: led_gpio
+#      - delay: 1s
+#      - output.turn_off: led_gpio
 
 captive_portal:
     
